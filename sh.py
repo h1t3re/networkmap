@@ -10,11 +10,9 @@ def run_command(command=[], timeout="5"):
 def main():
     for i in range(1, 254):
         try:
-            std_out, std_err = run_command(["ping", "-c 1", "192.168.1."+str(i)])
+            packet = scapy.sr(scapy.ICMP(type=8)/scapy.IP(dst="192.168.1."+str(i)), verbose=True)
         except:
-            print("Error running command.")
-        if b'1 received' in std_out:
-            print("host found: 192.168.1."+str(i))
+            print(".")
 
 if __name__ == "__main__":
     main()
