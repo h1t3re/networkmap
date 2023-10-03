@@ -41,6 +41,35 @@ void sig_handler(int sig) {
 	}
 }
 
+char *read_input()
+{
+	char *buffer = (char *)malloc(sizeof(char));
+	int buffer_len = 0;
+	char c = ' ';
+	while(((c = getchar()) != EOF) & (c != '\n'))
+	{
+		buffer[buffer_len] = c;
+		buffer_len++;
+		buffer = (char *)realloc(buffer, (buffer_len+1)*sizeof(char));
+	}
+	buffer[buffer_len] = '\0';
+	return buffer;
+
+}
+
+char *read_buffer(int fd)
+{
+	char *buffer = (char *)malloc(sizeof(char));
+	int buffer_len = 0;
+	while(read(fd, &buffer[buffer_len], sizeof(buffer[buffer_len])) > 0)
+	{
+		buffer_len++;
+		buffer = (char *)realloc(buffer, (buffer_len+1)*sizeof(char));
+	}
+	buffer[buffer_len] = '\0';
+	return buffer;
+}
+
 
 // Datagram Sockets: SOCK_DGRAM
 // Stream Sockets: SOCK_STREAM
@@ -125,7 +154,6 @@ int stream_socket(int port){
 void *accept_client_co(void *communication_fd){
 
   int comm_fd;
-  int msg_size;
   int i_bytes = 0;
   char *str = (char *)malloc(sizeof(char));
   int file_fd = open("/home/h1t3re/sk.c", O_RDONLY);
@@ -146,7 +174,7 @@ void *accept_client_co(void *communication_fd){
 }
 
 int main(int argc, char const *argv[]) {
-
+  
   int port;
   int err;
 
